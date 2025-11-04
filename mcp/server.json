@@ -1,0 +1,48 @@
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
+    "name": "io.github.Antonytm/mcp-figma",
+    "description": "A Model Context Protocol server for Figma",
+    "status": "active",
+    "repository": {
+        "url": "https://github.com/Antonytm/mcp-figma",
+        "source": "github"
+    },
+    "version": "0.1.0",
+    "packages": [
+        {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@antonytm/mcp-figma",
+            "version": "0.1.0",
+            "transport": {
+                "type": "stdio"
+            },
+            "environmentVariables": [
+                {
+                    "name": "TRANSPORT",
+                    "required": false,
+                    "isSecret": false,
+                    "valueHint": "stdio"
+                }
+            ]
+        },
+        {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@antonytm/mcp-figma",
+            "version": "0.1.0",
+            "transport": {
+                "type": "streamable-http",
+                "url": "http://localhost:3001/mcp"
+            },
+            "environmentVariables": [
+                {
+                    "name": "TRANSPORT",
+                    "required": false,
+                    "isSecret": false,
+                    "valueHint": "streamable-http"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,153 @@
+import express from "express";
+import { generateUUID } from "./utils.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js"
+import { getServer } from "./server.js";
+import { config } from "./config.js";
+import { Server } from "socket.io";
+import http from "http";
+
+export function startStreamableHTTP() { 
+    const app = express();
+    app.use(express.json());
+
+    // Add CORS middleware for Express routes
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, mcp-session-id');
+        if (req.method === 'OPTIONS') {
+            res.sendStatus(200);
+        } else {
+            next();
+        }
+    });
+
+    // Create HTTP server
+    const httpServer = http.createServer(app);
+    
+    // Create Socket.IO server attached to HTTP server
+    const io = new Server(httpServer, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST", "OPTIONS"],
+            allowedHeaders: ["*"],
+            credentials: false
+        },
+        // Allow both transports - Socket.IO needs polling for initial handshake
+        transports: ['polling', 'websocket'],
+        allowUpgrades: true, // Allow upgrade from polling to websocket
+        // Disable secure connections
+        cookie: false,
+        serveClient: false,
+        // Connection timeout
+        pingTimeout: 60000,
+        pingInterval: 25000
+    });
+    
+    io.on('connection', (socket) => {
+        console.log('a user connected:', socket.id);
+        socket.on('disconnect', (reason) => {
+            console.log('a user disconnected:', socket.id, reason);
+        });
+        socket.on('error', (error) => {
+            console.error('Socket error:', error);
+        });
+    });
+    
+    io.engine.on('connection_error', (err) => {
+        console.error('Socket.IO connection error:', err);
+        console.error('Error details:', err.req?.headers, err.context);
+    });
+    
+    // Log transport usage
+    io.engine.on('initial_headers', (headers, req) => {
+        console.log('Initial headers:', headers);
+    });
+    
+    io.engine.on('headers', (headers, req) => {
+        console.log('Headers:', headers);
+    });
+
+    // Map to store transports by session ID
+    const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
+
+    // Handle POST requests for client-to-server communication
+
+    app.post('/mcp', async (req: express.Request, res: express.Response) => {
+        // Inspector adds "Bearer" to the authorization header, so we need to strip it 
+
+        // Check for existing session ID
+        const sessionId = req.headers['mcp-session-id'] as string | undefined;
+        let transport: StreamableHTTPServerTransport;
+
+        if (sessionId && transports[sessionId]) {
+            // Reuse existing transport
+            transport = transports[sessionId];
+        } else if (!sessionId && isInitializeRequest(req.body)) {
+            // New initialization request
+            transport = new StreamableHTTPServerTransport({
+                sessionIdGenerator: () => generateUUID(),
+                onsessioninitialized: (sessionId) => {
+                    // Store the transport by session ID
+                    transports[sessionId] = transport;
+                }
+            });
+
+            // Clean up transport when closed
+            transport.onclose = () => {
+                if (transport.sessionId) {
+                    delete transports[transport.sessionId];
+                }
+            };
+            const server = await getServer(config);
+
+            await server.connect(transport);
+        } else {
+            // Invalid request
+            res.status(400).json({
+                jsonrpc: '2.0',
+                error: {
+                    code: -32000,
+                    message: 'Bad Request: No valid session ID provided',
+                },
+                id: null,
+            });
+            return;
+        }
+
+        // Handle the request
+        await transport.handleRequest(req, res, req.body);
+
+    });
+
+    // Reusable handler for GET and DELETE requests
+    const handleSessionRequest = async (req: express.Request, res: express.Response) => {
+        const sessionId = req.headers['mcp-session-id'] as string | undefined;
+        if (!sessionId || !transports[sessionId]) {
+            res.status(400).send('Invalid or missing session ID');
+            return;
+        }
+
+        const transport = transports[sessionId];
+        await transport.handleRequest(req, res);
+    };
+
+    // Handle GET requests for server-to-client notifications via SSE
+    app.get('/mcp', handleSessionRequest);
+
+    // Handle DELETE requests for session termination
+    app.delete('/mcp', handleSessionRequest);
+
+    // Start the HTTP server (Socket.IO will use this)
+    httpServer.listen(3001, () => {
+        console.log('Server listening on http://localhost:3001');
+    });
+
+    //async each 1 second, send a message to all connected clients
+    setInterval(() => {
+        io.emit('message', 'Hello from MCP server');
+        const clients = Array.from(io.sockets.sockets.keys());
+        console.log('Connected clients:', clients);
+    }, 1000);
+}

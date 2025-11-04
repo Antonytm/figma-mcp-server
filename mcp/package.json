@@ -1,0 +1,45 @@
+{
+  "name": "@antonytm/mcp-all",
+  "mcpName": "io.github.Antonytm/mcp-figma",
+  "version": "0.1.0",
+  "description": "MCP Server for Figma",
+  "main": "./dist/bundle.js",
+  "bin": {
+    "@antonytm/mcp-figma": "./dist/bundle.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-search-index": "node dist/build-search-index.js",
+    "build": "tsc",
+    "bundle": "rollup -c",
+    "start": "tsc && node dist/index.js",
+    "inspector": "npx @modelcontextprotocol/inspector@latest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/mcp-adapters": "^0.6.0",
+    "@modelcontextprotocol/sdk": "^1.18.1",
+    "dotenv": "^17.2.2",
+    "esm": "^3.2.25",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
+    "socket.io": "^4.8.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@types/express": "^5.0.3",
+    "@types/node": "^20.0.0",
+    "rollup": "^4.52.2",
+    "rollup-plugin-copy": "^3.5.0",
+    "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
