@@ -1,15 +1,5 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import Editor from '@monaco-editor/react';
-import { useRef, useEffect, useState } from 'react';
-import { emit, on } from '@create-figma-plugin/utilities';
-import { AutosaveCodeHandler, RunCodeHandler, LoadAutosaveCodeHandler, SaveCodeHandler, DownloadCodeHandler, UpdateIdCodeHandler } from './../shared/types';
-import { typings as pluginTypings } from './../typings/plugin-api';
-import { typings as indexTypings } from './../typings/index';
-import { unescapeQuote } from './../shared/escape';
-import { downloadFile } from './utils/file';
-import CustomIconButton from './components/mui/IconButton';
-import CustomTextField from './components/mui/TextField';
+import ReactDOM from 'react-dom/client';
 import './main.base.css';
 import './main.theme.css';
 import MainContainer from './components/main-container';
@@ -20,7 +10,9 @@ const AutosaveTimeout = 10000;
 function Plugin(props: any) {
   return (
     <MainContainer>
+      
       <MenuContainer>
+        aaa1 sas a
       </MenuContainer>
       <div style={{ 'height': '100%' }}>
 
@@ -54,4 +46,9 @@ function Plugin(props: any) {
   )
 }
 
-export default ReactDOM.render(<Plugin {...document.getElementById('data')?.dataset} />, document.getElementById('root'));
+const rootElement = document.getElementById('root');
+//@ts-ignore
+const root = ReactDOM.createRoot(rootElement);
+const dataElement = document.getElementById('data');
+root.render(<Plugin {...(dataElement?.dataset || {})} />);
+export default root;
