@@ -2,11 +2,12 @@ import { emit, loadFontsAsync, on, once, showUI } from '@create-figma-plugin/uti
 
 import { InsertCodeHandler, StartTaskHandler, TaskFailedHandler, TaskFinishedHandler } from './types'
 import { io } from 'socket.io-client'
-import { serializeNode } from './tools/serialization'
+import { serializeNode } from './serializers/serialization'
 import { safeToolProcessor } from './tools/safe-tool-processor'
-import { GetNodeInfoParams } from '@shared/types'
-import { getNodeInfo } from './tools/get-node-info'
+import { CreateRectangleParams, GetNodeInfoParams } from '@shared/types'
+import { getNodeInfo } from './tools/read/get-node-info'
 import { ToolResult } from './tools/tool-result'
+import { createRectangle } from './tools/create/create-rectangle'
 
 
 
@@ -44,6 +45,10 @@ export default async function () {
 
     if (task.command === 'get-node-info') {
       result = await safeToolProcessor<GetNodeInfoParams>(getNodeInfo)(task.args as GetNodeInfoParams);
+    }
+
+    if (task.command === 'create-rectangle') {
+      result = await safeToolProcessor<CreateRectangleParams>(createRectangle)(task.args as CreateRectangleParams);
     }
 
     if (result) {

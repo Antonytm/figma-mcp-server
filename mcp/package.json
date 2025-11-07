@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "bundle": "rollup -c",
-    "start": "tsc && node dist/mcp/src/index.js",
+    "start": "tsc && node dist/index.js",
     "inspector": "npx @modelcontextprotocol/inspector@latest"
   },
   "author": "",

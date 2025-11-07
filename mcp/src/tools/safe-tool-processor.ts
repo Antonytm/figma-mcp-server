@@ -4,8 +4,6 @@ import type { TaskResult } from "src/task-manager";
 export async function safeToolProcessor<T>(task: Promise<TaskResult>): Promise<CallToolResult> {
     try {
         const result = await task;
-        console.log("Safe tool processor result", result);
-        console.log("Safe tool processor result content", result.content);
         return {
             content: [{
                 type: "text",

@@ -5,7 +5,7 @@
     "paths": {
       "react": ["./node_modules/preact/compat"],
       "react-dom": ["./node_modules/preact/compat"],
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["../mcp/src/shared/*"]
     },
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@figma", "node_modules/@types"]

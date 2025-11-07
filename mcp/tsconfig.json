@@ -42,7 +42,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["src/shared/*"]
     }
   }
 }
