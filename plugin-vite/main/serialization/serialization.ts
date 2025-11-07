@@ -70,15 +70,16 @@ export function serializeNode(node: SceneNode, visited: Set<string> = new Set())
                     // Regular object, try to serialize it
                     try {
                         result[prop] = JSON.parse(JSON.stringify(value));
-                    } catch {
+                    } catch (error) {
                         result[prop] = String(value);
                     }
                 }
             } else {
                 result[prop] = value;
             }
-        } catch (e) {
+        } catch (error) {
             // Skip properties that cause errors
+            void error; // Prevent optimization of catch parameter
         }
     });
 

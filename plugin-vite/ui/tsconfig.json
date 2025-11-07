@@ -15,6 +15,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "typeRoots": ["../node_modules/@figma", "../node_modules/@types"]
+    "typeRoots": ["../node_modules/@figma", "../node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../../mcp/src/shared/*"]
+    }
   }
 }

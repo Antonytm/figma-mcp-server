@@ -5,6 +5,8 @@ export function serializeRectangle(rectangle: RectangleNode): string {
         width: rectangle.width,
         height: rectangle.height,
         name: rectangle.name,
-        parentId: rectangle.parent?.id
+        parentId: rectangle.parent
+            ? `${rectangle.parent.id}:${rectangle.parent.type}`
+            : undefined
     });
 }

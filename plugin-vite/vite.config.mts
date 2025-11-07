@@ -50,16 +50,24 @@ export default defineConfig({
   root: "./ui",
   plugins: [stripUseClient(), reactRefresh(), viteSingleFile(), touchManifest()],
   build: {
-    target: "esnext",
+    target: "es2017",
     assetsInlineLimit: 100000000,
     chunkSizeWarningLimit: 100000000,
     sourcemap: true,
     cssCodeSplit: false,
     outDir: "../dist",
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
     rollupOptions: {
       output: {
         inlineDynamicImports: true,
       },
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2017",
     },
   },
 });

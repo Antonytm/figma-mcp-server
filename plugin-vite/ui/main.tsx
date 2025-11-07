@@ -10,57 +10,60 @@ import {
   StartTaskHandler,
   TaskFinishedHandler,
   TaskFailedHandler,
-} from "../shared/types";
+} from "../main/types";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
 import Text from "./components/shared/text/text";
+import { useEffect } from "react";
 
 const AutosaveTimeout = 10000;
 
 function Plugin(props: any) {
   const [connected, setConnected] = React.useState(false);
-  const socket = io("ws://localhost:3001", {
-    transports: ["websocket", "polling"],
-    upgrade: true,
-    rememberUpgrade: false,
-  });
-  socket.on("connect", () => {
-    console.log("connected to MCP server");
-    setConnected(true);
-  });
-  socket.on("disconnect", () => {
-    console.log("disconnected from MCP server");
-    setConnected(false);
-  });
-  socket.on("message", (message: string) => {
-    console.log("message from MCP server:", message);
-  });
-  socket.emit("initialize", {
-    version: "1.0.0",
-    name: "Figma MCP Server",
-    description: "A MCP server for Figma",
-  });
-
-  socket.on("start-task", (task: any) => {
-    emit<StartTaskHandler>("START_TASK", {
-      taskId: task.id,
-      command: task.command,
-      args: task.args,
+  useEffect(() => {
+    const socket = io("ws://localhost:3001", {
+      transports: ["websocket", "polling"],
+      upgrade: true,
+      rememberUpgrade: false,
     });
-    console.log("start-task", task);
-  });
+    socket.on("connect", () => {
+      console.log("connected to MCP server");
+      setConnected(true);
+    });
+    socket.on("disconnect", () => {
+      console.log("disconnected from MCP server");
+      setConnected(false);
+    });
+    socket.on("message", (message: string) => {
+      //console.log("message from MCP server:", message);
+    });
+    socket.emit("initialize", {
+      version: "1.0.0",
+      name: "Figma MCP Server",
+      description: "A MCP server for Figma",
+    });
 
-  on<TaskFinishedHandler>("TASK_FINISHED", (task: TaskFinishedHandler) => {
-    socket.emit("task-finished", task);
-  });
+    socket.on("start-task", (task: any) => {
+      emit<StartTaskHandler>("START_TASK", {
+        taskId: task.id,
+        command: task.command,
+        args: task.args,
+      });
+      console.log("start-task", task);
+    });
 
-  on<TaskFailedHandler>("TASK_FAILED", (task: TaskFailedHandler) => {
-    socket.emit("task-failed", task);
-  });
+    on<TaskFinishedHandler>("TASK_FINISHED", (task: TaskFinishedHandler) => {
+      socket.emit("task-finished", task);
+    });
 
-  socket.onAny((event: string, data: any) => {
-    console.log("event", event, data);
-  });
+    on<TaskFailedHandler>("TASK_FAILED", (task: TaskFailedHandler) => {
+      socket.emit("task-failed", task);
+    });
+
+    socket.onAny((event: string, data: any) => {
+      //console.log("event", event, data);
+    });
+  }, []);
   return (
     <MainContainer>
       <MenuContainer>
@@ -70,9 +73,7 @@ function Plugin(props: any) {
               sx={{ color: "red" }}
               titleAccess="Not connected to MCP server"
             />
-            <Text>
-              Not connected to MCP server
-            </Text>
+            <Text>Not connected to MCP server</Text>
           </div>
         )}
 
@@ -82,9 +83,7 @@ function Plugin(props: any) {
               sx={{ color: "green" }}
               titleAccess="Connected to MCP server"
             />
-            <Text>
-              Connected to MCP server
-            </Text>
+            <Text>Connected to MCP server</Text>
           </div>
         )}
       </MenuContainer>

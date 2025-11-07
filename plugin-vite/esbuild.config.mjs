@@ -39,6 +39,8 @@ const buildOptions = {
   minify: isMinify,
   sourcemap: true,
   plugins: [touchManifestPlugin],
+  legalComments: 'none',
+  keepNames: false,
 };
 
 (async () => {
