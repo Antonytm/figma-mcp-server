@@ -6,7 +6,7 @@
     "figma"
   ],
   "permissions": [],
-  "main": "dist/mail.js",
+  "main": "dist/main.js",
   "ui": "dist/index.html",
   "networkAccess": {
     "allowedDomains": [

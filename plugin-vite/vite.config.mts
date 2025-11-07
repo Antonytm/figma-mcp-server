@@ -53,6 +53,7 @@ export default defineConfig({
     target: "esnext",
     assetsInlineLimit: 100000000,
     chunkSizeWarningLimit: 100000000,
+    sourcemap: true,
     cssCodeSplit: false,
     outDir: "../dist",
     rollupOptions: {

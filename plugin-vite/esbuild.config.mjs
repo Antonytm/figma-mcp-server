@@ -30,13 +30,14 @@ const isWatch = args.includes('--watch');
 const isMinify = args.includes('--minify');
 
 const buildOptions = {
-  entryPoints: ['main/code.ts'],
+  entryPoints: ['main/main.ts'],
   bundle: true,
-  outfile: 'dist/code.js',
+  outfile: 'dist/main.js',
   platform: 'browser',
   target: 'es2020',
   format: 'iife',
   minify: isMinify,
+  sourcemap: true,
   plugins: [touchManifestPlugin],
 };
 
