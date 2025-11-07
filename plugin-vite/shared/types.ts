@@ -52,3 +52,24 @@ export interface PluginData {
   title: string;
   id: string;
 }
+
+export type FromPluginMessage = {
+  taskId: string;
+  isError: boolean;
+  content: any;
+}
+
+export interface StartTaskHandler extends EventHandler {
+  name: 'START_TASK'
+  taskId: string
+  command: string
+  args: any
+}
+
+export interface TaskFinishedHandler extends EventHandler, FromPluginMessage {
+  name: 'TASK_FINISHED'
+}
+
+export interface TaskFailedHandler extends EventHandler, FromPluginMessage {
+  name: 'TASK_FAILED'
+}

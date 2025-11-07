@@ -10,16 +10,18 @@
   "ui": "dist/index.html",
   "networkAccess": {
     "allowedDomains": [
-      "http://localhost/",
-      "ws://localhost/",
-      "https://localhost/",
-      "wss://localhost/"
+      "http://localhost:3001/",
+      "ws://localhost:3001/",
+      "https://localhost:3001/",
+      "wss://localhost:3001/",
+      "https://fonts.googleapis.com"
     ],
     "devAllowedDomains": [
-      "http://localhost/",
-      "ws://localhost/",
-      "https://localhost/",
-      "wss://localhost/"
+      "http://localhost:3001/",
+      "ws://localhost:3001/",
+      "https://localhost:3001/",
+      "wss://localhost:3001/",
+      "https://fonts.googleapis.com"
     ],
     "reasoning": "This plugin needs to access the MCP server to get commands from the server."
   }
