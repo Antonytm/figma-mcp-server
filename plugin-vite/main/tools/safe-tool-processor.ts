@@ -7,7 +7,7 @@ export function safeToolProcessor<T>(tool: (args: T) => ToolResult) {
         } catch (error) {
             return {
                 isError: true,
-                content: error
+                content: error instanceof Error ? error.message : JSON.stringify(error)
             };
         }
     }

@@ -11,6 +11,8 @@ import { Orchestrator } from "./orchestrator.js";
 import { getSelection } from "./tools/read/get-selection.js";
 import { getNodeInfo } from "./tools/read/get-node-info.js";
 import { createRectangle } from "./tools/create/create-rectangle.js";
+import { moveNode } from "./tools/update/move-node.js";
+import { resizeNode } from "./tools/update/resize-node.js";
 
 export async function getServer(server: Server): Promise<McpServer> {
 
@@ -32,6 +34,10 @@ export async function getServer(server: Server): Promise<McpServer> {
     // Read tools
     getSelection(mcpServer, taskManager);
     getNodeInfo(mcpServer, taskManager);
+
+    // Update tools
+    moveNode(mcpServer, taskManager);
+    resizeNode(mcpServer, taskManager);
 
     return mcpServer;
 }

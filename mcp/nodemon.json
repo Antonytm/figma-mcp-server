@@ -1,0 +1,11 @@
+{
+  "watch": ["dist"],
+  "ext": "js",
+  "ignore": ["dist/**/*.d.ts", "dist/**/*.d.ts.map"],
+  "exec": "node dist/index.js",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 1000
+}
+

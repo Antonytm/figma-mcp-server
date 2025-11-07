@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "target": "esnext",
     "lib": ["esnext"],
-    "types": ["node"],
     "downlevelIteration": true,
 
     // Other Outputs
@@ -41,6 +40,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "baseUrl": ".",
+    "typeRoots": ["node_modules/@figma"],
     "paths": {
       "@shared/*": ["src/shared/*"]
     }

@@ -13,6 +13,7 @@
     "build": "tsc",
     "bundle": "rollup -c",
     "start": "tsc && node dist/index.js",
+    "dev": "npm run build && concurrently -n \"TSC,NODEMON\" -c \"blue,green\" \"tsc --watch\" \"nodemon\"",
     "inspector": "npx @modelcontextprotocol/inspector@latest"
   },
   "author": "",
@@ -28,12 +29,15 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@figma/plugin-typings": "^1.119.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@types/express": "^5.0.3",
     "@types/node": "^20.0.0",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
     "rollup": "^4.52.2",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.9.2"

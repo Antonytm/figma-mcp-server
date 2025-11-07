@@ -4,8 +4,11 @@ import { serializeNode } from './serialization/serialization';
 import { getNodeInfo } from './tools/read/get-node-info';
 import { createRectangle } from './tools/create/create-rectangle';
 import { safeToolProcessor } from './tools/safe-tool-processor';
-import { GetNodeInfoParams, CreateRectangleParams } from '@shared/types';
+import { GetNodeInfoParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams } from '@shared/types';
 import { emit, on } from '@create-figma-plugin/utilities';
+import { getSelection } from 'tools/read/get-selection';
+import { moveNode } from 'tools/update/move-node';
+import { resizeNode } from 'tools/update/resize-node';
 
 function main() {
 
@@ -17,12 +20,24 @@ function main() {
       content: "Tool not found"
     };
 
+    if (task.command === 'get-selection') {
+      result = await safeToolProcessor<void>(getSelection)();
+    }
+
     if (task.command === 'get-node-info') {
       result = await safeToolProcessor<GetNodeInfoParams>(getNodeInfo)(task.args as GetNodeInfoParams);
     }
 
     if (task.command === 'create-rectangle') {
       result = await safeToolProcessor<CreateRectangleParams>(createRectangle)(task.args as CreateRectangleParams);
+    }
+
+    if (task.command === 'move-node') {
+      result = await safeToolProcessor<MoveNodeParams>(moveNode)(task.args as MoveNodeParams);
+    }
+
+    if (task.command === 'resize-node') {
+      result = await safeToolProcessor<ResizeNodeParams>(resizeNode)(task.args as ResizeNodeParams);
     }
 
     if (result) {
