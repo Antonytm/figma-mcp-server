@@ -5,11 +5,15 @@ export * from './params/shared/color.js';
 // Create
 export * from './params/create/create-rectangle.js';
 export * from './params/create/create-frame.js';
+export * from './params/create/clone-node.js';
+export * from './params/create/create-text.js';
 
 // Read
 export * from './params/read/get-node-info.js';
 
 // Delete
+export * from './params/delete/delete-node.js';
+
 
 // Update
 export * from './params/update/move-node.js';

@@ -1,6 +1,6 @@
 import { emit, loadFontsAsync, on, once, showUI } from '@create-figma-plugin/utilities'
 
-import { InsertCodeHandler, StartTaskHandler, TaskFailedHandler, TaskFinishedHandler } from './types'
+import { StartTaskHandler, TaskFailedHandler, TaskFinishedHandler } from './types'
 import { io } from 'socket.io-client'
 import { serializeNode } from './serializers/serialization'
 import { safeToolProcessor } from './tools/safe-tool-processor'
@@ -12,14 +12,7 @@ import { createRectangle } from './tools/create/create-rectangle'
 
 
 export default async function () {
-  once<InsertCodeHandler>('INSERT_CODE', async function (code: string) {
-    const text = figma.createText()
-    await loadFontsAsync([text])
-    text.characters = code
-    figma.currentPage.selection = [text]
-    figma.viewport.scrollAndZoomIntoView([text])
-    figma.closePlugin()
-  })
+
 
   on<StartTaskHandler>('START_TASK', async function (task: StartTaskHandler) {
     console.log('start-task', task)

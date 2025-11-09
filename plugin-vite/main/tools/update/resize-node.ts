@@ -2,7 +2,7 @@ import { CreateRectangleParams, MoveNodeParams, ResizeNodeParams } from "@shared
 import { serializeNode } from "serialization/serialization";
 import { ToolResult } from "tools/tool-result";
 
-export function resizeNode(args: ResizeNodeParams): ToolResult {
+export async function resizeNode(args: ResizeNodeParams): Promise<ToolResult> {
     const node = figma.getNodeById(args.id);
 
     if (!node) {

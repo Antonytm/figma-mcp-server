@@ -1,7 +1,7 @@
 import { serializeNode } from "../../serialization/serialization";
 import { ToolResult } from "../tool-result";
 
-export function getSelection(args: void): ToolResult {
+export async function getSelection(args: void): Promise<ToolResult> {
     const selection = figma.currentPage.selection;
     if (selection) {
         const serializedSelection = selection.map(node => serializeNode(node));

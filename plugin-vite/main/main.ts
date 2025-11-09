@@ -4,11 +4,15 @@ import { serializeNode } from './serialization/serialization';
 import { getNodeInfo } from './tools/read/get-node-info';
 import { createRectangle } from './tools/create/create-rectangle';
 import { safeToolProcessor } from './tools/safe-tool-processor';
-import { GetNodeInfoParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams } from '@shared/types';
+import { GetNodeInfoParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams  } from '@shared/types';
 import { emit, on } from '@create-figma-plugin/utilities';
 import { getSelection } from 'tools/read/get-selection';
 import { moveNode } from 'tools/update/move-node';
 import { resizeNode } from 'tools/update/resize-node';
+import { deleteNode } from 'tools/delete/delete-node';
+import { cloneNode } from 'tools/create/clone-node';
+import { createFrame } from 'tools/create/create-frame';
+import { createText } from 'tools/create/create-text';
 
 function main() {
 
@@ -38,6 +42,22 @@ function main() {
 
     if (task.command === 'resize-node') {
       result = await safeToolProcessor<ResizeNodeParams>(resizeNode)(task.args as ResizeNodeParams);
+    }
+
+    if (task.command === 'delete-node') {
+      result = await safeToolProcessor<DeleteNodeParams>(deleteNode)(task.args as DeleteNodeParams);
+    }
+
+    if (task.command === 'clone-node') {
+      result = await safeToolProcessor<CloneNodeParams>(cloneNode)(task.args as CloneNodeParams);
+    }
+
+    if (task.command === 'create-frame') {
+      result = await safeToolProcessor<CreateFrameParams>(createFrame)(task.args as CreateFrameParams);
+    }
+
+    if (task.command === 'create-text') {
+      result = await safeToolProcessor<CreateTextParams>(createText)(task.args as CreateTextParams);
     }
 
     if (result) {

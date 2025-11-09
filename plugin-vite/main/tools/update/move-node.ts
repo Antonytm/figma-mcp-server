@@ -2,7 +2,7 @@ import { CreateRectangleParams, MoveNodeParams } from "@shared/types";
 import { ToolResult } from "../tool-result";
 import { serializeNode } from "serialization/serialization";
 
-export function moveNode(args: MoveNodeParams): ToolResult {
+export async function moveNode(args: MoveNodeParams): Promise<ToolResult> {
     const node = figma.getNodeById(args.id);
 
     if (!node) {

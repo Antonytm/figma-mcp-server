@@ -2,7 +2,7 @@ import { CreateRectangleParams } from "@shared/types";
 import { ToolResult } from "../tool-result";
 import { serializeRectangle } from "../../serialization/serialize-rectangle";
 
-export function createRectangle(args: CreateRectangleParams): ToolResult {
+export async function createRectangle(args: CreateRectangleParams): Promise<ToolResult> {
     const rectangle = figma.createRectangle();
     rectangle.x = args.x;
     rectangle.y = args.y;
