@@ -21,7 +21,7 @@ const AutosaveTimeout = 10000;
 function Plugin(props: any) {
   const [connected, setConnected] = React.useState(false);
   useEffect(() => {
-    const socket = io("ws://localhost:3001", {
+    const socket = io("ws://localhost:3846", {
       transports: ["websocket", "polling"],
       upgrade: true,
       rememberUpgrade: false,
@@ -121,7 +121,7 @@ function Plugin(props: any) {
               fill="#0D0C22"
             />
             <path
-              d="M18.2808 9.36407L18.3001 9.35294L18.3073 9.34884L18.3138 9.3418C18.3017 9.34715 18.2904 9.35468 18.2808 9.36407Z"
+              d="M18.2808 9.36407L18.3846 9.35294L18.3073 9.34884L18.3138 9.3418C18.3017 9.34715 18.2904 9.35468 18.2808 9.36407Z"
               fill="#0D0C22"
             />
             <path

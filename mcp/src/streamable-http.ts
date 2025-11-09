@@ -139,8 +139,8 @@ export async function startStreamableHTTP() {
     app.delete('/mcp', handleSessionRequest);
 
     // Start the HTTP server (Socket.IO will use this)
-    httpServer.listen(3001, () => {
-        console.log('Server listening on http://localhost:3001');
+    httpServer.listen(3846, () => {
+        console.log('Server listening on http://localhost:3846');
     });
 
     //async each 1 second, send a message to all connected clients

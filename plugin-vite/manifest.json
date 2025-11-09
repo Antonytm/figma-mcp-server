@@ -10,18 +10,18 @@
   "ui": "dist/index.html",
   "networkAccess": {
     "allowedDomains": [
-      "http://localhost:3001/",
-      "ws://localhost:3001/",
-      "https://localhost:3001/",
-      "wss://localhost:3001/",
+      "http://localhost:3846/",
+      "ws://localhost:3846/",
+      "https://localhost:3846/",
+      "wss://localhost:3846/",
       "https://fonts.googleapis.com",
       "https://fonts.gstatic.com"
     ],
     "devAllowedDomains": [
-      "http://localhost:3001/",
-      "ws://localhost:3001/",
-      "https://localhost:3001/",
-      "wss://localhost:3001/",
+      "http://localhost:3846/",
+      "ws://localhost:3846/",
+      "https://localhost:3846/",
+      "wss://localhost:3846/",
       "https://fonts.googleapis.com",
       "https://fonts.gstatic.com"
     ],

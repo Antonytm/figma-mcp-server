@@ -19,4 +19,4 @@ RUN npm prune --production
 CMD ["node","dist/index.js"]
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3846
