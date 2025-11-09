@@ -10,7 +10,7 @@ export function serializeText(text: TextNode): string {
         name: text.name,
         fontSize: text.fontSize,
         fontName: text.fontName,
-        fontColor: serializeFill(text.fills),
+        fontColor: serializeFill(text.fills as Paint[]),
         parentId: text.parent ? `${text.parent.id}:${text.parent.type}` : undefined
     });
 }

@@ -55,6 +55,11 @@ export function serializeNode(node: SceneNode, visited: Set<string> = new Set())
                 return;
             }
 
+            //if figma.mixed, ignore property
+            if (value === figma.mixed) {
+                return;
+            }
+
             if (typeof value === 'object') {
                 if (Array.isArray(value)) {
                     result[prop] = value.map((item: any) => {

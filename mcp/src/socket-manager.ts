@@ -13,14 +13,22 @@ export class SocketManager {
         this.server.on('connection', (socket) => {
             console.log('a user connected:', socket.id);
             socket.on('task-finished', (data: FromPluginMessage) => {
-                if (this._onTaskFinishedCallback) {
-                    this._onTaskFinishedCallback(data);
+                try {
+                    if (this._onTaskFinishedCallback) {
+                        this._onTaskFinishedCallback(data);
+                    }
+                } catch (error) {
+                    console.error('Error in task-finished handler:', error);
                 }
             });
     
             socket.on('task-failed', (data: FromPluginMessage) => {
-                if (this._onTaskErrorCallback) {
-                    this._onTaskErrorCallback(data);
+                try {
+                    if (this._onTaskErrorCallback) {
+                        this._onTaskErrorCallback(data);
+                    }
+                } catch (error) {
+                    console.error('Error in task-failed handler:', error);
                 }
             });
         });

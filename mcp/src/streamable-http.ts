@@ -46,13 +46,21 @@ export async function startStreamableHTTP() {
     });
     
     io.on('connection', (socket) => {
-        console.log('a user connected:', socket.id);
-        socket.on('disconnect', (reason) => {
-            console.log('a user disconnected:', socket.id, reason);
-        });
-        socket.on('error', (error) => {
-            console.error('Socket error:', error);
-        });
+        try {
+            console.log('a user connected:', socket.id);
+            socket.on('disconnect', (reason) => {
+                try {
+                    console.log('a user disconnected:', socket.id, reason);
+                } catch (error) {
+                    console.error('Error in disconnect handler:', error);
+                }
+            });
+            socket.on('error', (error) => {
+                console.error('Socket error:', error);
+            });
+        } catch (error) {
+            console.error('Error in connection handler:', error);
+        }
     });
     
     io.engine.on('connection_error', (err) => {
@@ -75,61 +83,81 @@ export async function startStreamableHTTP() {
     const server = await getServer(io);
 
     app.post('/mcp', async (req: express.Request, res: express.Response) => {
-        // Inspector adds "Bearer" to the authorization header, so we need to strip it 
+        try {
+            // Inspector adds "Bearer" to the authorization header, so we need to strip it 
 
-        // Check for existing session ID
-        const sessionId = req.headers['mcp-session-id'] as string | undefined;
-        let transport: StreamableHTTPServerTransport;
+            // Check for existing session ID
+            const sessionId = req.headers['mcp-session-id'] as string | undefined;
+            let transport: StreamableHTTPServerTransport;
 
-        if (sessionId && transports[sessionId]) {
-            // Reuse existing transport
-            transport = transports[sessionId];
-        } else if (!sessionId && isInitializeRequest(req.body)) {
-            // New initialization request
-            transport = new StreamableHTTPServerTransport({
-                sessionIdGenerator: () => generateUUID(),
-                onsessioninitialized: (sessionId) => {
-                    // Store the transport by session ID
-                    transports[sessionId] = transport;
-                }
-            });
+            if (sessionId && transports[sessionId]) {
+                // Reuse existing transport
+                transport = transports[sessionId];
+            } else if (!sessionId && isInitializeRequest(req.body)) {
+                // New initialization request
+                transport = new StreamableHTTPServerTransport({
+                    sessionIdGenerator: () => generateUUID(),
+                    onsessioninitialized: (sessionId) => {
+                        // Store the transport by session ID
+                        transports[sessionId] = transport;
+                    }
+                });
 
-            // Clean up transport when closed
-            transport.onclose = () => {
-                if (transport.sessionId) {
-                    delete transports[transport.sessionId];
-                }
-            };
+                // Clean up transport when closed
+                transport.onclose = () => {
+                    if (transport.sessionId) {
+                        delete transports[transport.sessionId];
+                    }
+                };
 
-            await server.connect(transport);
-        } else {
-            // Invalid request
-            res.status(400).json({
-                jsonrpc: '2.0',
-                error: {
-                    code: -32000,
-                    message: 'Bad Request: No valid session ID provided',
-                },
-                id: null,
-            });
-            return;
+                await server.connect(transport);
+            } else {
+                // Invalid request
+                res.status(400).json({
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32000,
+                        message: 'Bad Request: No valid session ID provided',
+                    },
+                    id: null,
+                });
+                return;
+            }
+
+            // Handle the request
+            await transport.handleRequest(req, res, req.body);
+        } catch (error) {
+            console.error('Error handling MCP POST request:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32603,
+                        message: 'Internal server error',
+                    },
+                    id: null,
+                });
+            }
         }
-
-        // Handle the request
-        await transport.handleRequest(req, res, req.body);
-
     });
 
     // Reusable handler for GET and DELETE requests
     const handleSessionRequest = async (req: express.Request, res: express.Response) => {
-        const sessionId = req.headers['mcp-session-id'] as string | undefined;
-        if (!sessionId || !transports[sessionId]) {
-            res.status(400).send('Invalid or missing session ID');
-            return;
-        }
+        try {
+            const sessionId = req.headers['mcp-session-id'] as string | undefined;
+            if (!sessionId || !transports[sessionId]) {
+                res.status(400).send('Invalid or missing session ID');
+                return;
+            }
 
-        const transport = transports[sessionId];
-        await transport.handleRequest(req, res);
+            const transport = transports[sessionId];
+            await transport.handleRequest(req, res);
+        } catch (error) {
+            console.error('Error handling session request:', error);
+            if (!res.headersSent) {
+                res.status(500).send('Internal server error');
+            }
+        }
     };
 
     // Handle GET requests for server-to-client notifications via SSE

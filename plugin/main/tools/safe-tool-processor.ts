@@ -3,7 +3,7 @@ import { ToolResult } from "./tool-result";
 export function safeToolProcessor<T>(tool: (args: T) => Promise<ToolResult> ) {
     return async (args: T) => {
         try {
-            return tool(args);
+            return await tool(args);
         } catch (error) {
             console.error(error);
             return {
