@@ -34,7 +34,6 @@ export class TaskManager {
         const promise = new Promise((resolve, reject) => {
             this.addTask(id, command, args, resolve, reject);
             setTimeout(() => {
-                console.log("Task timed out", command, args);
                 this.updateTask(id, { error: "Task timed out" }, "timed_out");
             }, 5000);
         });
@@ -60,7 +59,6 @@ export class TaskManager {
         this.tasks.push(task);
         // Call the onTaskAdded event if subscriber(s) exist
         if (typeof this._onTaskAddedCallback === "function") {
-            console.log("Raising task added event", JSON.stringify(task));
             this._onTaskAddedCallback(task);
         }
     }
@@ -74,13 +72,15 @@ export class TaskManager {
 
     public updateTask(id: string, result: any, status: TaskStatus) {
 
-        console.log("Updating task", id, result, status);
         const task = this.tasks.find(task => task.id === id);
         if (task) {
             if (task.status === 'completed'
                 || task.status === 'failed'
                 || task.status === 'timed_out') {
-                console.error("Attempt to update task after it has been completed, failed or timed out", id, result, status);
+                if (task.status !== 'completed') {
+                    console.error("Attempt to update task after it has been completed, failed or timed out", id, result, status);
+                }
+                return;
             }
 
             task.status = status;

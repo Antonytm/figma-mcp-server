@@ -22,12 +22,6 @@ export async function startSTDIO() {
             pingInterval: 25000
         });
         
-        httpServer.listen(PORT, () => {
-            console.log(`Socket.IO server listening on http://localhost:${PORT}`);
-        });
-        socketServer.on('connection', (socket) => {
-            console.log('a user connected:', socket.id);
-        });
         const server = await getServer(socketServer);
         const transport = new StdioServerTransport();
         await server.connect(transport);

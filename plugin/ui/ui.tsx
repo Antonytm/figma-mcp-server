@@ -13,34 +13,57 @@ import {
 } from "../main/types";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CopyIcon from "@mui/icons-material/CopyAll";
 import Text from "./components/shared/text/text";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { Box, Button, Link, Popover } from "@mui/material";
+import { Typography } from "@mui/material";
+import Logs from "./components/mui/Logs";
 
 const AutosaveTimeout = 10000;
 
 function Plugin(props: any) {
   const [connected, setConnected] = React.useState(false);
+  const [helpOpen, setHelpOpen] = React.useState(false);
+  const [helpAnchorEl, setHelpAnchorEl] =
+    React.useState<HTMLButtonElement | null>(null);
+  const handleHelpOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setHelpOpen(true);
+    setHelpAnchorEl(event.currentTarget);
+  };
+
+  const mcpServers = `
+  {
+    "mcpServers": {
+      "Figma": {
+        "command": "npx",
+        "args": ["@antonytm/figma-mcp-server@latest"]
+      }
+    }
+  }
+  `;
+
+  const addLogRef = useRef<((log: string) => void) | null>(null);
   useEffect(() => {
-    const socket = io("ws://localhost:3846", {
+    const socket = io("ws://localhost:38450", {
       transports: ["websocket", "polling"],
       upgrade: true,
       rememberUpgrade: false,
     });
     socket.on("connect", () => {
       console.log("connected to MCP server");
+      addLogRef.current?.("Connected to MCP server");
       setConnected(true);
     });
     socket.on("disconnect", () => {
       console.log("disconnected from MCP server");
+      addLogRef.current?.("Disconnected from MCP server");
       setConnected(false);
     });
     socket.on("message", (message: string) => {
-      //console.log("message from MCP server:", message);
-    });
-    socket.emit("initialize", {
-      version: "1.0.0",
-      name: "Figma MCP Server",
-      description: "A MCP server for Figma",
+      addLogRef.current?.(`Message from MCP server: ${message}`);
+      console.log("message from MCP server:", message);
     });
 
     socket.on("start-task", (task: any) => {
@@ -50,18 +73,20 @@ function Plugin(props: any) {
         args: task.args,
       });
       console.log("start-task", task);
+      addLogRef.current?.(`Task started: ${task.command} (ID: ${task.id})`);
     });
 
     on<TaskFinishedHandler>("TASK_FINISHED", (task: TaskFinishedHandler) => {
       socket.emit("task-finished", task);
+      addLogRef.current?.(`Task finished: ${task.taskId} - ${task.content}`);
     });
 
     on<TaskFailedHandler>("TASK_FAILED", (task: TaskFailedHandler) => {
       socket.emit("task-failed", task);
+      addLogRef.current?.(`Task failed: ${task.taskId} - ${task.content}`);
     });
 
     socket.onAny((event: string, data: any) => {
-      //console.log("event", event, data);
     });
   }, []);
   return (
@@ -86,11 +111,78 @@ function Plugin(props: any) {
             <Text>Connected to MCP server</Text>
           </div>
         )}
+        <Button onClick={handleHelpOpen}>
+          <QuestionMarkIcon titleAccess="Help" style={{ cursor: "pointer" }} />
+        </Button>
+        <Popover
+          open={helpOpen}
+          onClose={() => setHelpOpen(false)}
+          anchorEl={helpAnchorEl}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          disableRestoreFocus
+        >
+          <div
+            style={{
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              fontSize: "12px",
+              pointerEvents: "auto",
+            }}
+          >
+            <Text>1. Open MCP configuration of your client</Text>
+            <Text>
+              2. Add the following configuration:
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  pointerEvents: "auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    fontSize: "10px",
+                    fontFamily: "monospace",
+                    whiteSpace: "pre-wrap",
+                    overflowX: "auto",
+                    padding: "0px",
+                  }}
+                >
+                  {mcpServers}
+                </Box>
+              </div>
+            </Text>
+
+            <Text>3. Save changes and restart your client if needed</Text>
+            <Link
+              href="https://github.com/antonytm/figma-mcp-server"
+              target="_blank"
+            >
+              <Text>View on GitHub</Text>
+            </Link>
+          </div>
+        </Popover>
       </MenuContainer>
-      <div style={{ height: "100%" }}></div>
+      <Box 
+        sx={{ 
+          flex: 1, 
+          minHeight: 0, 
+          display: "flex", 
+          flexDirection: "column",
+          overflow: "hidden"
+        }}
+      >
+        <Logs onAddLogRef={addLogRef} />
+      </Box>
       <div
         style={{
-          display: "flex",
+          display: "none",
           flexDirection: "column",
           alignItems: "flex-end",
           paddingTop: "16px",

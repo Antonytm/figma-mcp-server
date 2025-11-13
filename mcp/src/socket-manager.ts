@@ -11,7 +11,6 @@ export class SocketManager {
         this.server = server;
 
         this.server.on('connection', (socket) => {
-            console.log('a user connected:', socket.id);
             socket.on('task-finished', (data: FromPluginMessage) => {
                 try {
                     if (this._onTaskFinishedCallback) {
