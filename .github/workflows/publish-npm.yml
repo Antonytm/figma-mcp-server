@@ -28,6 +28,15 @@ jobs:
       - name: Bundle package
         working-directory: ./mcp
         run: npm run bundle
+      - name: Verify package.json
+        working-directory: ./mcp
+        run: |
+          echo "Package name: $(node -p "require('./package.json').name")"
+          echo "Package version: $(node -p "require('./package.json').version")"
+          echo "Publish config: $(node -p "JSON.stringify(require('./package.json').publishConfig || {}, null, 2)")"
+      - name: Check npm authentication
+        working-directory: ./mcp
+        run: npm whoami --registry=https://registry.npmjs.org || echo "Not authenticated (this is expected for trusted publishing)"
       - name: Publish package on NPM 📦
         working-directory: ./mcp
-        run: npm publish
+        run: npm publish --access public
