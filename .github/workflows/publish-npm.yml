@@ -25,6 +25,9 @@ jobs:
       - name: Bundle package
         working-directory: ./mcp
         run: npm run bundle
+      - name: NPM login
+        working-directory: ./mcp
+        run: npm login
       - name: Publish package on NPM 📦
         working-directory: ./mcp
         run: npm publish
