@@ -20,22 +20,6 @@ jobs:
       # Ensure npm 11.5.1 or later is installed for trusted publishing
       - name: Update npm
         run: npm install -g npm@latest
-      - name: Configure npm registry for trusted publishing
-        env:
-          # Unset any token environment variables - trusted publishing uses OIDC
-          NODE_AUTH_TOKEN: ""
-          NPM_TOKEN: ""
-        run: |
-          # Remove any token-based authentication that setup-node might have added
-          # Trusted publishing uses OIDC, not tokens
-          if [ -f ~/.npmrc ]; then
-            # Remove any auth token lines
-            sed -i '/_authToken/d' ~/.npmrc || true
-            sed -i '/always-auth/d' ~/.npmrc || true
-          fi
-          # Configure registry without token authentication
-          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "@antonytm:registry=https://registry.npmjs.org/" >> ~/.npmrc
       - name: Install dependencies  
         working-directory: ./mcp
         run: npm ci
@@ -45,18 +29,6 @@ jobs:
       - name: Bundle package
         working-directory: ./mcp
         run: npm run bundle
-      - name: Verify package.json
-        working-directory: ./mcp
-        run: |
-          echo "Package name: $(node -p "require('./package.json').name")"
-          echo "Package version: $(node -p "require('./package.json').version")"
-          echo "Publish config: $(node -p "JSON.stringify(require('./package.json').publishConfig || {}, null, 2)")"
-      - name: Check npm authentication
-        working-directory: ./mcp
-        run: npm whoami --registry=https://registry.npmjs.org || echo "Not authenticated (this is expected for trusted publishing)"
       - name: Publish package on NPM 📦
         working-directory: ./mcp
-        run: |
-          # Run npm publish without token environment variables
-          # Trusted publishing uses OIDC automatically when configured on npmjs.com
-          env -u NODE_AUTH_TOKEN -u NPM_TOKEN npm publish --access public
+        run: npm publish
