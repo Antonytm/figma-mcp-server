@@ -3,7 +3,7 @@ import { generateUUID } from "./utils.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js"
 import { getServer } from "./server.js";
-import { config } from "./config.js";
+import { config, PORT } from "./config.js";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -167,8 +167,8 @@ export async function startStreamableHTTP() {
     app.delete('/mcp', handleSessionRequest);
 
     // Start the HTTP server (Socket.IO will use this)
-    httpServer.listen(3846, () => {
-        console.log('Server listening on http://localhost:3846');
+    httpServer.listen(PORT, () => {
+        console.log(`Server listening on http://localhost:${PORT}`);
     });
 
     //async each 1 second, send a message to all connected clients

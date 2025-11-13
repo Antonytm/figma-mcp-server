@@ -1,11 +1,30 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { getServer } from './server.js';
-import { config } from './config.js';
+import { config, PORT } from './config.js';
 import { Server } from 'socket.io';
+import http from 'http';
 
 export async function startSTDIO() {
     try {
-        const socketServer = new Server();
+        const httpServer = http.createServer();
+        const socketServer = new Server(httpServer, {
+            cors: {
+                origin: "*",
+                methods: ["GET", "POST", "OPTIONS"],
+                allowedHeaders: ["*"],
+                credentials: false
+            },
+            transports: ['polling', 'websocket'],
+            allowUpgrades: true,
+            cookie: false,
+            serveClient: false,
+            pingTimeout: 60000,
+            pingInterval: 25000
+        });
+        
+        httpServer.listen(PORT, () => {
+            console.log(`Socket.IO server listening on http://localhost:${PORT}`);
+        });
         socketServer.on('connection', (socket) => {
             console.log('a user connected:', socket.id);
         });
