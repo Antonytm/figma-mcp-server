@@ -6,6 +6,10 @@
     "Figma NPM": {
       "command": "npx",
       "args": ["@antonytm/figma-mcp-server@latest"]
+    },
+    "Figma bundle": {
+      "command": "node",
+      "args": ["C:\\source\\figma-mcp-server\\mcp\\dist\\bundle.js"]
     }
   }
 }

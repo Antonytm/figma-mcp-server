@@ -33,7 +33,7 @@
             "version": "0.1.0",
             "transport": {
                 "type": "streamable-http",
-                "url": "http://localhost:3846/mcp"
+                "url": "http://localhost:38450/mcp"
             },
             "environmentVariables": [
                 {

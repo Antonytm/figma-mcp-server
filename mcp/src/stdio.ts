@@ -25,6 +25,11 @@ export async function startSTDIO() {
         const server = await getServer(socketServer);
         const transport = new StdioServerTransport();
         await server.connect(transport);
+        
+        // Start HTTP server for Socket.IO connections from Figma plugin
+        httpServer.listen(PORT, () => {
+            console.log(`Socket.IO server listening on http://localhost:${PORT}`);
+        });
     } catch (error) {
         console.error('Error starting STDIO server:', error);
         throw error;

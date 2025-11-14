@@ -11,6 +11,7 @@ export default {
     file: "dist/bundle.js",
     format: "esm",
     inlineDynamicImports: true,
+    sourcemap: true,
   },
   plugins: [
     nodeResolve({
