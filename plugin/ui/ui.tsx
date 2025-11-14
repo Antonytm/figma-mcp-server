@@ -78,12 +78,12 @@ function Plugin(props: any) {
 
     on<TaskFinishedHandler>("TASK_FINISHED", (task: TaskFinishedHandler) => {
       socket.emit("task-finished", task);
-      addLogRef.current?.(`Task finished: ${task.taskId} - ${JSON.stringify(task.content)}`);
+      addLogRef.current?.(`Task finished: ${task.taskId}`);
     });
 
     on<TaskFailedHandler>("TASK_FAILED", (task: TaskFailedHandler) => {
       socket.emit("task-failed", task);
-      addLogRef.current?.(`Task failed: ${task.taskId} - ${JSON.stringify(task.content)}`);
+      addLogRef.current?.(`Task failed: ${task.taskId}`);
     });
 
     socket.onAny((event: string, data: any) => {

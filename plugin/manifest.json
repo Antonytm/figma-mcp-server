@@ -1,6 +1,6 @@
 {
-  "name": "Figma MCP Server: Vite",
-  "id": "mcp-server-vite",
+  "name": "Figma MCP Server",
+  "id": "figma-mcp-server",
   "api": "1.0.0",
   "editorType": [
     "figma"

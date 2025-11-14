@@ -67,15 +67,6 @@ export async function startStreamableHTTP() {
         console.error('Socket.IO connection error:', err);
         console.error('Error details:', err.req?.headers, err.context);
     });
-    
-    // Log transport usage
-    io.engine.on('initial_headers', (headers, req) => {
-        console.log('Initial headers:', headers);
-    });
-    
-    io.engine.on('headers', (headers, req) => {
-        console.log('Headers:', headers);
-    });
 
     // Map to store transports by session ID
     const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
@@ -173,8 +164,7 @@ export async function startStreamableHTTP() {
 
     //async each 1 second, send a message to all connected clients
     setInterval(() => {
-        io.emit('message', 'Hello from MCP server');
         const clients = Array.from(io.sockets.sockets.keys());
         console.log('Connected clients:', clients);
-    }, 1000);
+    }, 10000);
 }
