@@ -7,6 +7,7 @@ export * from './params/create/create-rectangle.js';
 export * from './params/create/create-frame.js';
 export * from './params/create/clone-node.js';
 export * from './params/create/create-text.js';
+export * from './params/create/create-instance.js';
 
 // Read
 export * from './params/read/get-node-info.js';

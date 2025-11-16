@@ -5,7 +5,7 @@ import { getNodeInfo } from './tools/read/get-node-info';
 import { getAllComponents } from './tools/read/get-all-components';
 import { createRectangle } from './tools/create/create-rectangle';
 import { safeToolProcessor } from './tools/safe-tool-processor';
-import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams } from '@shared/types';
+import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams, CreateInstanceParams } from '@shared/types';
 import { emit, on } from '@create-figma-plugin/utilities';
 import { getSelection } from 'tools/read/get-selection';
 import { moveNode } from 'tools/update/move-node';
@@ -18,6 +18,7 @@ import { setFillColor } from 'tools/update/set-fill-color';
 import { setStrokeColor } from 'tools/update/set-stroke-color';
 import { setCornerRadius } from 'tools/update/set-corner-radius';
 import { setLayout } from 'tools/update/set-layout';
+import { createInstance } from 'tools/create/create-instance';
 
 function main() {
 
@@ -68,6 +69,10 @@ function main() {
 
       if (task.command === 'create-text') {
         result = await safeToolProcessor<CreateTextParams>(createText)(task.args as CreateTextParams);
+      }
+
+      if (task.command === 'create-instance') {
+        result = await safeToolProcessor<CreateInstanceParams>(createInstance)(task.args as CreateInstanceParams);
       }
 
       if (task.command === 'set-fill-color') {
