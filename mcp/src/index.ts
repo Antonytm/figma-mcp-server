@@ -1,19 +1,20 @@
 #!/usr/bin/env node
-import { envStartSchema, type EnvStartConfig } from './config.js';
-import { startSTDIO } from './stdio.js';
-import { startStreamableHTTP } from './streamable-http.js';
-import 'dotenv/config.js';
+import { envStartSchema, type EnvStartConfig } from "./config.js";
+import { startSTDIO } from "./stdio.js";
+import { startStreamableHTTP } from "./streamable-http.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const ENV: EnvStartConfig = envStartSchema.parse(process.env);
 
 try {
-    if(ENV.TRANSPORT === "streamable-http") {
+    if (ENV.TRANSPORT === "streamable-http") {
         await startStreamableHTTP();
-    }
-    else {
+    } else {
         await startSTDIO();
     }
 } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error("Failed to start server:", error);
     process.exit(1);
 }

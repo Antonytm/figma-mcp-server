@@ -1,5 +1,5 @@
 import { CreateComponentParams } from "@shared/types";
-import { serializeNode } from "serialization/serialization";
+import { serializeComponent } from "serialization/serialize-component";
 import { ToolResult } from "tools/tool-result";
 
 export async function createComponent(args: CreateComponentParams): Promise<ToolResult> {
@@ -15,5 +15,5 @@ export async function createComponent(args: CreateComponentParams): Promise<Tool
             return { isError: true, content: "Parent node not found" };
         }
     }
-    return { isError: false, content: serializeNode(component) };
+    return { isError: false, content: serializeComponent(component) };
 }

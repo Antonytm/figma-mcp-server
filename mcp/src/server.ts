@@ -29,6 +29,8 @@ import { deleteComponentProperty } from "./tools/delete/delete-component-propert
 import { setInstanceProperties } from "./tools/update/set-instance-properties.js";
 import { createComponent } from "./tools/create/create-component.js";
 import { setParentId } from "./tools/update/set-parent-id.js";
+import { setNodeComponentPropertyReferences } from "./tools/update/set-node-component-property-references.js";
+import { getPages } from "./tools/read/get-pages.js";
 
 export async function getServer(server: Server): Promise<McpServer> {
 
@@ -56,6 +58,7 @@ export async function getServer(server: Server): Promise<McpServer> {
     getSelection(mcpServer, taskManager);
     getNodeInfo(mcpServer, taskManager);
     getAllComponents(mcpServer, taskManager);
+    getPages(mcpServer, taskManager);
 
     // Update tools
     moveNode(mcpServer, taskManager);
@@ -67,6 +70,7 @@ export async function getServer(server: Server): Promise<McpServer> {
     editComponentProperty(mcpServer, taskManager);
     setInstanceProperties(mcpServer, taskManager);
     setParentId(mcpServer, taskManager);
+    setNodeComponentPropertyReferences(mcpServer, taskManager);
     // Delete tools
     deleteNode(mcpServer, taskManager);
     deleteComponentProperty(mcpServer, taskManager);

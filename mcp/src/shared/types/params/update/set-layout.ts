@@ -12,6 +12,8 @@ export const SetLayoutParamsSchema = z.object({
     paddingRight: z.number().optional().describe("Right padding"),
     paddingTop: z.number().optional().describe("Top padding"),
     paddingBottom: z.number().optional().describe("Bottom padding"),
+    layoutSizingVertical: z.enum(["FIXED", "HUG", "FILL"]).optional().describe("Vertical layout sizing"),
+    layoutSizingHorizontal: z.enum(["FIXED", "HUG", "FILL"]).optional().describe("Horizontal layout sizing"),
 });
 
 export type SetLayoutParams = z.infer<typeof SetLayoutParamsSchema>;

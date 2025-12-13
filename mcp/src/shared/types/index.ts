@@ -14,6 +14,7 @@ export * from './params/create/create-component.js';
 // Read
 export * from './params/read/get-node-info.js';
 export * from './params/read/get-all-components.js';
+export * from './params/read/get-pages.js';
 
 // Delete
 export * from './params/delete/delete-node.js';

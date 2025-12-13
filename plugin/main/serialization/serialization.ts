@@ -30,9 +30,18 @@ export function serializeNode(node: SceneNode, visited: Set<string> = new Set())
         current = Object.getPrototypeOf(current);
     }
 
+
     allProps.forEach(prop => {
+        //console.log(prop);
+        //console.log(typeof (node as any)[prop]);
         // Skip functions and internal properties
-        if (prop === 'parent' || prop === 'removed' || typeof (node as any)[prop] === 'function') {
+        if (prop === 'parent'
+            || prop === 'removed'
+            || prop === 'instances'
+            || prop === 'mainComponent'
+            || prop === 'masterComponent'
+            || typeof (node as any)[prop] === 'function'
+            ) {
             return;
         }
 

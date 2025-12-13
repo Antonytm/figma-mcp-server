@@ -98,6 +98,23 @@ export async function setLayout(args: SetLayoutParams): Promise<ToolResult> {
         }
     }
 
+    if (args.layoutSizingVertical) {
+        if ("layoutSizingVertical" in node) {
+            (node as unknown as { layoutSizingVertical: string }).layoutSizingVertical = args.layoutSizingVertical;
+        }
+        else {
+            errorMessage += "Node does not have a layoutSizingVertical property\n";
+        }
+    }
+    if (args.layoutSizingHorizontal) {
+        if ("layoutSizingHorizontal" in node) {
+            (node as unknown as { layoutSizingHorizontal: string }).layoutSizingHorizontal = args.layoutSizingHorizontal;
+        }
+        else {
+            errorMessage += "Node does not have a layoutSizingHorizontal property\n";
+        }
+    }   
+
     if (errorMessage.length > 0) {
         return { isError: true, content: errorMessage };
     }
