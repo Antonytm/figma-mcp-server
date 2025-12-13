@@ -10,7 +10,7 @@
     "tsc:main": "tsc --noEmit -p main",
     "tsc:ui": "tsc --noEmit -p ui",
     "tsc:watch": "concurrently -n main,ui \"npm run tsc:main -- --watch --preserveWatchOutput\" \"npm run tsc:ui -- --watch --preserveWatchOutput\"",
-    "build": "npm run build:ui && npm run build:main -- --minify",
+    "build": "npm run build:ui && npm run build:main",
     "build:main": "node esbuild.config.mjs",
     "build:ui": "npx vite build --minify esbuild --emptyOutDir=false",
     "build:watch": "concurrently -n main,ui \"npm run build:main -- --watch\" \"npm run build:ui -- --watch\"",

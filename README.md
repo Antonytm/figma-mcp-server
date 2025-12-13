@@ -1,52 +1,71 @@
 # Figma Model Context protocol server
 
+## Problem
+
+The official Figma MCP server has only read-only tools. **You can not change anything in the Figma document using the official Figma MCP server.**
+You can use AI Agent in Figma Make. But, it is not convenient to chat in Figma Make and then move result to Figma to continue.
+The goal is to enable AI Agents to work with your Figma documents. 
+
 ## Usage
 
-### STDIO Transport (standard input output)
+### Prerequisites
+1. Install `Node.js` if you don't have it
+2. Clone this repository
 
-1. Configure MCP server in your client
-```
-"Figma": {
-    "command": "npx",
-    "args": ["@antonytm/figma-mcp-server@latest"]
-}
-```
-2. Open Figma file in Figma MCP plugin
-3. Plugin should show you message: *Connected to MCP server*
-4. You are ready to use MCP server in your client
+### Start Figma Plugin
 
-### Streamable HTTP Transport
-Figma MCP server could be run using two types of transport: `stdio` and `streamable-http`. It is configured via environment variable `TRANSPORT`.
+1. Switch to plugin directory: `cd plugin`
+2. Install dependencies: `npm i`
+3. Build Figma Plugin `npm run build`
+4. Open Figma, open document you want to work with
+5. Add Figma Plugin *Plugins* > *Development* > *Imprort Plugin from manifest*, select `/plugin/manifest.json`
+6. Start the *Figma MCP Server* plugin
+7. Expected result: Message *Not connected to MCP server* should be shown
+8. Do not close Plugin window. It will show message *Connected to MCP server* when it is started.
 
-1. Start MCP server in terminal
-a. Windows CMD: `set TRANSPORT=streamable-http&&npx @antonytm/figma-mcp-server@latest`
-b. Windows PowerShell: `$env:TRANSPORT = "streamable-http"; npx @antonytm/figma-mcp-server@latest`
-c. macOS Bash: `TRANSPORT=streamable-http npx @antonytm/figma-mcp-server@latest`
-2. Open `http://localhost:38450/mcp` in browser. Expected result: `Invalid or missing session ID`
-3. Open Figma file in Figma MCP plugin
-4. Plugin should show you message: *Connected to MCP server*
-5. Configure MCP server in your client
-```
-"Figma": {
-    "url": "http://127.0.0.1:38450/mcp"
-}
-```
-6. You should be able to use MCP server
+### Start MCP server 
+
+1. Switch to MCP directory: `cd mcp`
+2. Install dependencies: `npm i`
+3. Start the server: `npm run start`
+4. Expected result: Messages `Server listening on http://localhost:38450` and `a user connected: .............` in the console
+
+### Configure MCP server in your client
+
+1. Use Streaming HTTP transport and `http://localhost:38450/mcp` URL
+2. Turn off tools that you don't need
+
+Now you should be able to ask your AI Agent to do something in Figma. For example:
+
+![Claude](doc/Claude.png)
+![Figma](doc/Figma.png)
+
+
+**We are working on publishing it as Figma plugin. Figma reviewers haven't accepted it so far.**
+Once Figma accept it as plugin, the configuration and start will be simplified a lot!
 
 ## Development
 
+Contributions to the project are welcome!
+
 ### MCP server
 1. `cd mcp`
-2. `npm run dev`
+2. `npm i`
+3. `npm run dev`
 
 ### Plugin
 1. `cd plugin`
-2. `npm run dev`
-3. Open Figma
-4. Plugins > Development > Import plugin from manifest ...
-5. Select `manifest.json` from `plugin\manifest.json`
-6. Start plugin
-7. You should see *Connected to MCP server* message
+2. `npm i`
+3. `npm run dev`
+4. Open Figma
+5. Plugins > Development > Import plugin from manifest ...
+6. Select `manifest.json` from `plugin\manifest.json`
+7. Start plugin
+8. You should see *Connected to MCP server* message
+
+### Add Plugin to Figma
+1. Open Figma
+2. Add Figma Plugin *Plugins* > *Development* > *Imprort Plugin from manifest*, select `/plugin/manifest.json`
 
 ### Inspector
 1. `cd mcp`
