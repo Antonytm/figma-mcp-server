@@ -1,5 +1,7 @@
 # Figma Model Context protocol server
 
+[![Community Figma MCP server - Allow AI Agents to help you with Figma designs! | Product Hunt](https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=1056256&amp;theme=light&amp;period=daily&amp;t=1767540612947)](https://www.producthunt.com/products/community-figma-mcp-server?embed=true&amp;utm_source=badge-top-post-badge&amp;utm_medium=badge&amp;utm_campaign=badge-community-figma-mcp-server)
+
 ## Problem
 
 The official Figma MCP server has only read-only tools. **You can not change anything in the Figma document using the official Figma MCP server.**
