@@ -47,12 +47,12 @@ export async function setLayout(args: SetLayoutParams): Promise<ToolResult> {
                 errorMessage += "Node does not have a itemSpacing property\n";
             }
         }
-        if (args.primaryAxisAlignContent) {
-            if ("primaryAxisAlignContent" in node) {
-                (node as unknown as { primaryAxisAlignContent: string }).primaryAxisAlignContent = args.primaryAxisAlignContent;
+        if (args.primaryAxisAlignItems) {
+            if ("primaryAxisAlignItems" in node) {
+                (node as unknown as { primaryAxisAlignItems: string }).primaryAxisAlignItems = args.primaryAxisAlignItems;
             }
             else {
-                errorMessage += "Node does not have a primaryAxisAlignContent property\n";
+                errorMessage += "Node does not have a primaryAxisAlignItems property\n";
             }
         }
         if (args.counterAxisAlignItems) {
