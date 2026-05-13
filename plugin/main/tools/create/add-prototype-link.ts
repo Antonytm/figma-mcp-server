@@ -54,14 +54,8 @@ export async function addPrototypeLink(args: AddPrototypeLinkParams): Promise<To
         trigger: { type: args.trigger }
     };
 
-    var existingReactions: any[] = [];
-    var existing = sceneNode.reactions;
-    if (existing && existing.length > 0) {
-        for (var i = 0; i < existing.length; i++) {
-            existingReactions.push(existing[i]);
-        }
-    }
-    existingReactions.push(reaction);
+    const existing = sceneNode.reactions || [];
+    const existingReactions: any[] = [...existing, reaction];
 
     await sceneNode.setReactionsAsync(existingReactions);
 
