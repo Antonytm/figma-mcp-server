@@ -32,6 +32,7 @@ import { setParentId } from "./tools/update/set-parent-id.js";
 import { setNodeComponentPropertyReferences } from "./tools/update/set-node-component-property-references.js";
 import { getPages } from "./tools/read/get-pages.js";
 import { createImage } from "./tools/create/create-image.js";
+import { addPrototypeLink } from "./tools/create/add-prototype-link.js";
 
 export async function getServer(server: Server): Promise<McpServer> {
 
@@ -56,6 +57,7 @@ export async function getServer(server: Server): Promise<McpServer> {
     addComponentProperty(mcpServer, taskManager);
     createComponent(mcpServer, taskManager);
     createImage(mcpServer, taskManager);
+    addPrototypeLink(mcpServer, taskManager);
     // Read tools
     getSelection(mcpServer, taskManager);
     getNodeInfo(mcpServer, taskManager);

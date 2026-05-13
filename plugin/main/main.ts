@@ -5,7 +5,7 @@ import { getNodeInfo } from './tools/read/get-node-info';
 import { getAllComponents } from './tools/read/get-all-components';
 import { createRectangle } from './tools/create/create-rectangle';
 import { safeToolProcessor } from './tools/safe-tool-processor';
-import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams, CreateInstanceParams, AddComponentPropertyParams, EditComponentPropertyParams, DeleteComponentPropertyParams, SetInstancePropertiesParams, SetNodeComponentPropertyReferencesParams, CreateComponentParams, SetParentIdParams, GetPagesParams, CreateImageParams } from '@shared/types';
+import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams, CreateInstanceParams, AddComponentPropertyParams, EditComponentPropertyParams, DeleteComponentPropertyParams, SetInstancePropertiesParams, SetNodeComponentPropertyReferencesParams, CreateComponentParams, SetParentIdParams, GetPagesParams, CreateImageParams, AddPrototypeLinkParams } from '@shared/types';
 import { emit, on } from '@create-figma-plugin/utilities';
 import { getSelection } from 'tools/read/get-selection';
 import { moveNode } from 'tools/update/move-node';
@@ -28,6 +28,7 @@ import { createComponent } from 'tools/create/create-component';
 import { setParentId } from 'tools/update/set-parent-id';
 import { getPages } from 'tools/read/get-pages';
 import { createImage } from 'tools/create/create-image';
+import { addPrototypeLink } from 'tools/create/add-prototype-link';
 
 function main() {
 
@@ -134,6 +135,10 @@ function main() {
 
       if (task.command === 'create-image') {
         result = await safeToolProcessor<CreateImageParams>(createImage)(task.args as CreateImageParams);
+      }
+
+      if (task.command === 'add-prototype-link') {
+        result = await safeToolProcessor<AddPrototypeLinkParams>(addPrototypeLink)(task.args as AddPrototypeLinkParams);
       }
 
       if (result) {
