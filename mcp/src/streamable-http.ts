@@ -1,6 +1,7 @@
 import express from "express";
 import { generateUUID } from "./utils.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js"
 import { getServer } from "./server.js";
 import { config, PORT } from "./config.js";
@@ -101,7 +102,7 @@ export async function startStreamableHTTP() {
                     }
                 };
 
-                await server.connect(transport);
+                await server.connect(transport as Transport);
             } else {
                 // Invalid request
                 res.status(400).json({
