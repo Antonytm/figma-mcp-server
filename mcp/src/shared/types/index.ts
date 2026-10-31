@@ -35,3 +35,17 @@ export * from './params/update/set-instance-properties.js';
 export * from './params/update/set-node-component-property-references.js';
 export * from './params/update/set-parent-id.js';
 
+// Text / Node / Variable tools
+export * from './params/text/set-text-characters.js';
+export * from './params/text/set-text-style.js';
+export * from './params/node/rename-node.js';
+export * from './params/node/create-svg.js';
+export * from './params/node/create-component-from-node.js';
+export * from './params/variable/create-variable-collection.js';
+export * from './params/variable/create-variable.js';
+export * from './params/variable/get-variables.js';
+export * from './params/variable/bind-variable.js';
+export * from './params/node/list-children.js';
+export * from './params/node/set-node-style.js';
+export * from './params/node/combine-as-variants.js';
+export * from './params/variable/delete-variable.js';

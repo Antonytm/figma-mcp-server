@@ -5,7 +5,7 @@ import { getNodeInfo } from './tools/read/get-node-info';
 import { getAllComponents } from './tools/read/get-all-components';
 import { createRectangle } from './tools/create/create-rectangle';
 import { safeToolProcessor } from './tools/safe-tool-processor';
-import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams, CreateInstanceParams, AddComponentPropertyParams, EditComponentPropertyParams, DeleteComponentPropertyParams, SetInstancePropertiesParams, SetNodeComponentPropertyReferencesParams, CreateComponentParams, SetParentIdParams, GetPagesParams, CreateImageParams, AddPrototypeLinkParams } from '@shared/types';
+import { GetNodeInfoParams, GetAllComponentsParams, CreateRectangleParams, MoveNodeParams, ResizeNodeParams, DeleteNodeParams, CloneNodeParams, CreateFrameParams, CreateTextParams, SetFillColorParams, SetStrokeColorParams, SetCornerRadiusParams, SetLayoutParams, CreateInstanceParams, AddComponentPropertyParams, EditComponentPropertyParams, DeleteComponentPropertyParams, SetInstancePropertiesParams, SetNodeComponentPropertyReferencesParams, CreateComponentParams, SetParentIdParams, GetPagesParams, CreateImageParams, AddPrototypeLinkParams, ListChildrenParams, SetNodeStyleParams, CombineAsVariantsParams, DeleteVariableParams, SetTextCharactersParams, SetTextStyleParams, RenameNodeParams, CreateSvgParams, CreateComponentFromNodeParams, CreateVariableCollectionParams, CreateVariableParams, GetVariablesParams, BindVariableParams } from '@shared/types';
 import { emit, on } from '@create-figma-plugin/utilities';
 import { getSelection } from 'tools/read/get-selection';
 import { moveNode } from 'tools/update/move-node';
@@ -29,6 +29,19 @@ import { setParentId } from 'tools/update/set-parent-id';
 import { getPages } from 'tools/read/get-pages';
 import { createImage } from 'tools/create/create-image';
 import { addPrototypeLink } from 'tools/create/add-prototype-link';
+import { listChildren } from 'tools/node/list-children';
+import { setNodeStyle } from 'tools/node/set-node-style';
+import { combineAsVariants } from 'tools/node/combine-as-variants';
+import { deleteVariable } from 'tools/variable/delete-variable';
+import { setTextCharacters } from 'tools/text/set-text-characters';
+import { setTextStyle } from 'tools/text/set-text-style';
+import { renameNode } from 'tools/node/rename-node';
+import { createSvg } from 'tools/node/create-svg';
+import { createComponentFromNode } from 'tools/node/create-component-from-node';
+import { createVariableCollection } from 'tools/variable/create-variable-collection';
+import { createVariable } from 'tools/variable/create-variable';
+import { getVariables } from 'tools/variable/get-variables';
+import { bindVariable } from 'tools/variable/bind-variable';
 
 function main() {
 
@@ -45,6 +58,59 @@ function main() {
       if (task.command === 'get-selection') {
         result = await safeToolProcessor<void>(getSelection)();
       }
+
+      if (task.command === 'set-text-characters') {
+        result = await safeToolProcessor<SetTextCharactersParams>(setTextCharacters)(task.args as SetTextCharactersParams);
+      }
+
+      if (task.command === 'set-text-style') {
+        result = await safeToolProcessor<SetTextStyleParams>(setTextStyle)(task.args as SetTextStyleParams);
+      }
+
+      if (task.command === 'rename-node') {
+        result = await safeToolProcessor<RenameNodeParams>(renameNode)(task.args as RenameNodeParams);
+      }
+
+      if (task.command === 'create-svg') {
+        result = await safeToolProcessor<CreateSvgParams>(createSvg)(task.args as CreateSvgParams);
+      }
+
+      if (task.command === 'create-component-from-node') {
+        result = await safeToolProcessor<CreateComponentFromNodeParams>(createComponentFromNode)(task.args as CreateComponentFromNodeParams);
+      }
+
+      if (task.command === 'create-variable-collection') {
+        result = await safeToolProcessor<CreateVariableCollectionParams>(createVariableCollection)(task.args as CreateVariableCollectionParams);
+      }
+
+      if (task.command === 'create-variable') {
+        result = await safeToolProcessor<CreateVariableParams>(createVariable)(task.args as CreateVariableParams);
+      }
+
+      if (task.command === 'get-variables') {
+        result = await safeToolProcessor<void>(getVariables)();
+      }
+
+      if (task.command === 'bind-variable') {
+        result = await safeToolProcessor<BindVariableParams>(bindVariable)(task.args as BindVariableParams);
+      }
+
+      if (task.command === 'list-children') {
+        result = await safeToolProcessor<ListChildrenParams>(listChildren)(task.args as ListChildrenParams);
+      }
+
+      if (task.command === 'set-node-style') {
+        result = await safeToolProcessor<SetNodeStyleParams>(setNodeStyle)(task.args as SetNodeStyleParams);
+      }
+
+      if (task.command === 'combine-as-variants') {
+        result = await safeToolProcessor<CombineAsVariantsParams>(combineAsVariants)(task.args as CombineAsVariantsParams);
+      }
+
+      if (task.command === 'delete-variable') {
+        result = await safeToolProcessor<DeleteVariableParams>(deleteVariable)(task.args as DeleteVariableParams);
+      }
+
 
       if (task.command === 'get-node-info') {
         result = await safeToolProcessor<GetNodeInfoParams>(getNodeInfo)(task.args as GetNodeInfoParams);
