@@ -33,6 +33,19 @@ import { setNodeComponentPropertyReferences } from "./tools/update/set-node-comp
 import { getPages } from "./tools/read/get-pages.js";
 import { createImage } from "./tools/create/create-image.js";
 import { addPrototypeLink } from "./tools/create/add-prototype-link.js";
+import { listChildren } from "./tools/node/list-children.js";
+import { setNodeStyle } from "./tools/node/set-node-style.js";
+import { combineAsVariants } from "./tools/node/combine-as-variants.js";
+import { deleteVariable } from "./tools/variable/delete-variable.js";
+import { setTextCharacters } from "./tools/text/set-text-characters.js";
+import { setTextStyle } from "./tools/text/set-text-style.js";
+import { renameNode } from "./tools/node/rename-node.js";
+import { createSvg } from "./tools/node/create-svg.js";
+import { createComponentFromNode } from "./tools/node/create-component-from-node.js";
+import { createVariableCollection } from "./tools/variable/create-variable-collection.js";
+import { createVariable } from "./tools/variable/create-variable.js";
+import { getVariables } from "./tools/variable/get-variables.js";
+import { bindVariable } from "./tools/variable/bind-variable.js";
 
 export async function getServer(server: Server): Promise<McpServer> {
 
@@ -75,6 +88,22 @@ export async function getServer(server: Server): Promise<McpServer> {
     setInstanceProperties(mcpServer, taskManager);
     setParentId(mcpServer, taskManager);
     setNodeComponentPropertyReferences(mcpServer, taskManager);
+    // Text / Node / Variable tools
+    setTextCharacters(mcpServer, taskManager);
+    setTextStyle(mcpServer, taskManager);
+    renameNode(mcpServer, taskManager);
+    createSvg(mcpServer, taskManager);
+    createComponentFromNode(mcpServer, taskManager);
+    createVariableCollection(mcpServer, taskManager);
+    createVariable(mcpServer, taskManager);
+    getVariables(mcpServer, taskManager);
+    bindVariable(mcpServer, taskManager);
+
+    listChildren(mcpServer, taskManager);
+    setNodeStyle(mcpServer, taskManager);
+    combineAsVariants(mcpServer, taskManager);
+    deleteVariable(mcpServer, taskManager);
+
     // Delete tools
     deleteNode(mcpServer, taskManager);
     deleteComponentProperty(mcpServer, taskManager);
