@@ -35,7 +35,7 @@ export class TaskManager {
             this.addTask(id, command, args, resolve, reject);
             setTimeout(() => {
                 this.updateTask(id, { error: "Task timed out" }, "timed_out");
-            }, 5000);
+            }, 45000);
         });
         return promise as Promise<any>;
     }

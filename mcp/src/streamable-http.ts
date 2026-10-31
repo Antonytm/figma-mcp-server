@@ -72,8 +72,6 @@ export async function startStreamableHTTP() {
     // Map to store transports by session ID
     const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
 
-    const server = await getServer(io);
-
     app.post('/mcp', async (req: express.Request, res: express.Response) => {
         try {
             // Inspector adds "Bearer" to the authorization header, so we need to strip it 
@@ -102,6 +100,11 @@ export async function startStreamableHTTP() {
                     }
                 };
 
+                // Each session gets its OWN McpServer instance — the SDK
+                // throws "Already connected to a transport" if the same
+                // server is connect()-ed more than once, which previously
+                // broke every session after the first.
+                const server = await getServer(io);
                 await server.connect(transport as Transport);
             } else {
                 // Invalid request
